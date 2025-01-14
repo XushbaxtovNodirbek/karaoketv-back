@@ -5,7 +5,7 @@ const pool = require('../db');
 
 router.get('/getAll', authenticateToken, async (req, res) => {
     const result = await pool.query('SELECT * FROM contents');
-    res.status(200).json(result);
+    res.status(200).json(result.rows);
 })
 
 module.exports = router;
