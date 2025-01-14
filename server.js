@@ -8,7 +8,9 @@ app.use(express.json());
 
 // Import routes
 const apiRoutes = require('./routes/api');
+const contentRoutes = require('./routes/contents');
 app.use('/api', apiRoutes);
+app.use('/api/contents', contentRoutes);
 
 // Start the server
 app.listen(PORT, () => {
