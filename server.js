@@ -2,9 +2,11 @@ const express = require('express');
 const app = express();
 const PORT = 3000;
 require('dotenv').config();
+const cors = require('cors');
 
 // Middleware to parse JSON
 app.use(express.json());
+app.use(cors());
 
 // Import routes
 const apiRoutes = require('./routes/api');
