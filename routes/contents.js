@@ -16,7 +16,6 @@ router.get('/getAll', authenticateToken, async (req, res) => {
                 SELECT *
                 FROM contents
                 WHERE title ILIKE $1
-                   OR content ILIKE $1
                 ORDER BY id
                     LIMIT $2
                 OFFSET $3
@@ -30,7 +29,6 @@ router.get('/getAll', authenticateToken, async (req, res) => {
                 SELECT COUNT(*)
                 FROM contents
                 WHERE title ILIKE $1
-                   OR content ILIKE $1
             `,
             [`%${search}%`]
         );
