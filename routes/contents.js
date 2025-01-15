@@ -36,9 +36,11 @@ router.get('/getAll', authenticateToken, async (req, res) => {
 
         res.status(200).json({
             data: result.rows,
-            currentPage: parseInt(page),
-            totalPages: Math.ceil(total / limit),
-            totalItems: total,
+            meta: {
+                currentPage: parseInt(page),
+                totalPages: Math.ceil(total / limit),
+                totalItems: total,
+            }
         });
     } catch (err) {
         console.error(err.message);
