@@ -53,13 +53,13 @@ router.post('/create', authenticateToken, async (req, res) => {
 
     // Validate the input
     if (!title || !url || !img) {
-        return res.status(400).json({message: 'Title and url are required'});
+        return res.status(400).json({message: 'Title, url, and img are required'});
     }
 
     try {
         // Insert the new content into the database
         const result = await pool.query(
-            'INSERT INTO contents (title, url,img) VALUES ($1, $2, $3) RETURNING *',
+            'INSERT INTO contents (title, url, img) VALUES ($1, $2, $3) RETURNING *',
             [title, url, img],
         );
 
@@ -103,6 +103,41 @@ router.put('/update', authenticateToken, async (req, res) => {
         // Respond with the updated content
         res.status(200).json({
             message: 'Content updated successfully',
+            data: result.rows[0],
+        });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({error: 'Server error'});
+    }
+});
+
+router.delete('/delete/:id', authenticateToken, async (req, res) => {
+    const {id} = req.params;
+
+    // Validate the input
+    if (!id) {
+        return res.status(400).json({message: 'ID is required'});
+    }
+
+    try {
+        // Delete the content from the database
+        const result = await pool.query(
+            `
+                DELETE
+                FROM contents
+                WHERE id = $1 RETURNING *
+            `,
+            [id]
+        );
+
+        // Check if the content was found and deleted
+        if (result.rowCount === 0) {
+            return res.status(404).json({message: 'Content not found'});
+        }
+
+        // Respond with the deleted content
+        res.status(200).json({
+            message: 'Content deleted successfully',
             data: result.rows[0],
         });
     } catch (err) {
